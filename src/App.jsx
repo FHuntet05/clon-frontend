@@ -1,8 +1,5 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { TelegramProvider } from './context/TelegramContext'
-import { UserProvider } from './context/UserContext'
-import { I18nProvider } from './context/I18nContext'
 import { useAuth } from './hooks/useAuth'
 
 // Pages
@@ -36,52 +33,6 @@ const LoadingScreen = () => (
   </div>
 )
 
-// Error Boundary
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { hasError: false, error: null }
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error }
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo)
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center p-4" style={{
-          background: 'linear-gradient(to bottom, #04041e, #062b67)'
-        }}>
-          <div className="text-center" style={{ color: 'white' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Something went wrong</h1>
-            <p style={{ opacity: 0.7, marginBottom: '16px' }}>{this.state.error?.message}</p>
-            <button
-              onClick={() => window.location.reload()}
-              style={{
-                background: '#5556ec',
-                color: 'white',
-                padding: '8px 16px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer'
-              }}
-            >
-              Reload App
-            </button>
-          </div>
-        </div>
-      )
-    }
-
-    return this.props.children
-  }
-}
-
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth()
@@ -98,7 +49,7 @@ const AppLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col" style={{
       background: 'linear-gradient(to bottom, #04041e, #062b67)',
-      backgroundImage: 'url(https://ext.same-assets.com/3546354360/3218586608.png)',
+      backgroundImage: 'url(https://ext.same-assets.com/3546354360/3772941444.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center'
     }}>
@@ -110,77 +61,64 @@ const AppLayout = ({ children }) => {
   )
 }
 
-// App Content Component (needs to be inside providers)
-const AppContent = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={
-          <ProtectedRoute>
-            <AppLayout>
-              <MinePage />
-            </AppLayout>
-          </ProtectedRoute>
-        } />
-        <Route path="/mine" element={
-          <ProtectedRoute>
-            <AppLayout>
-              <MinePage />
-            </AppLayout>
-          </ProtectedRoute>
-        } />
-        <Route path="/leaderboard" element={
-          <ProtectedRoute>
-            <AppLayout>
-              <LeaderboardPage />
-            </AppLayout>
-          </ProtectedRoute>
-        } />
-        <Route path="/upgrade" element={
-          <ProtectedRoute>
-            <AppLayout>
-              <UpgradePage />
-            </AppLayout>
-          </ProtectedRoute>
-        } />
-        <Route path="/team" element={
-          <ProtectedRoute>
-            <AppLayout>
-              <TeamPage />
-            </AppLayout>
-          </ProtectedRoute>
-        } />
-        <Route path="/profile" element={
-          <ProtectedRoute>
-            <AppLayout>
-              <ProfilePage />
-            </AppLayout>
-          </ProtectedRoute>
-        } />
-      </Routes>
-    </Router>
-  )
-}
-
-// Main App Component with all providers
+// Main App Component
 function App() {
   return (
-    <ErrorBoundary>
-      <TelegramProvider>
-        <I18nProvider>
-          <UserProvider>
-            <AppContent />
-          </UserProvider>
-        </I18nProvider>
-      </TelegramProvider>
-      <style jsx>{`
+    <>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <MinePage />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/mine" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <MinePage />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/leaderboard" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <LeaderboardPage />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/upgrade" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <UpgradePage />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/team" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <TeamPage />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <ProfilePage />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </Router>
+      <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
       `}</style>
-    </ErrorBoundary>
+    </>
   )
 }
 
