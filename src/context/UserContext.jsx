@@ -98,6 +98,21 @@ export const UserProvider = ({ children }) => {
   const { user: telegramUser } = useTelegram()
   const [state, dispatch] = useReducer(userReducer, initialState)
 
+  const initializeUser = useCallback(async () => {
+    if (!telegramUser) return
+
+    dispatch({ type: 'SET_LOADING', payload: true })
+
+    try {
+      // Get or create user data
+      const userData = await userAPI.getOrCreateUser(telegramUser)
+      dispatch({ type: 'SET_USER_DATA', payload: userData })
+    } catch (error) {
+      console.error('Failed to initialize user:', error)
+      dispatch({ type: 'SET_ERROR', payload: error.message })
+    }
+  }, [telegramUser])
+
   useEffect(() => {
     if (telegramUser) {
       initializeUser()
@@ -115,21 +130,6 @@ export const UserProvider = ({ children }) => {
 
     return () => clearInterval(interval)
   }, [state.energy, state.maxEnergy])
-
-  const initializeUser = useCallback(async () => {
-    if (!telegramUser) return
-
-    dispatch({ type: 'SET_LOADING', payload: true })
-
-    try {
-      // Get or create user data
-      const userData = await userAPI.getOrCreateUser(telegramUser)
-      dispatch({ type: 'SET_USER_DATA', payload: userData })
-    } catch (error) {
-      console.error('Failed to initialize user:', error)
-      dispatch({ type: 'SET_ERROR', payload: error.message })
-    }
-  }, [telegramUser])
 
   const mineCoins = (amount = state.miningRate, energyCost = 1) => {
     dispatch({

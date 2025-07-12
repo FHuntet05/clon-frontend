@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Battery, Zap, Coins } from 'lucide-react'
 import { useUser } from '../context/UserContext'
 import { useTelegram } from '../context/TelegramContext'

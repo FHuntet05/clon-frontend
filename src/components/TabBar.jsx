@@ -61,7 +61,7 @@ const TabBar = () => {
               onClick={() => handleTabClick(path)}
               className={`flex flex-col items-center justify-center p-2 min-w-0 flex-1 transition-all duration-200 ${
                 isActive
-                  ? 'text-cosno-primary scale-110'
+                  ? 'text-purple-500 scale-110'
                   : 'text-white/60 hover:text-white/80'
               }`}
             >
