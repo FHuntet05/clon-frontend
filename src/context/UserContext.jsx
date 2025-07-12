@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react'
 import { useTelegram } from './TelegramContext'
 import { userAPI } from '../utils/api'
 
@@ -57,7 +57,7 @@ const userReducer = (state, action) => {
     case 'UPDATE_ENERGY':
       return { ...state, energy: action.payload }
 
-    case 'MINE_COINS':
+    case 'MINE_COINS': {
       const energyCost = action.payload.cost || 1
       const coinsEarned = action.payload.amount || state.miningRate
 
@@ -70,6 +70,7 @@ const userReducer = (state, action) => {
         }
       }
       return state
+    }
 
     case 'SET_WALLET':
       return {
@@ -101,7 +102,7 @@ export const UserProvider = ({ children }) => {
     if (telegramUser) {
       initializeUser()
     }
-  }, [telegramUser])
+  }, [telegramUser, initializeUser])
 
   // Energy regeneration
   useEffect(() => {
@@ -115,7 +116,7 @@ export const UserProvider = ({ children }) => {
     return () => clearInterval(interval)
   }, [state.energy, state.maxEnergy])
 
-  const initializeUser = async () => {
+  const initializeUser = useCallback(async () => {
     if (!telegramUser) return
 
     dispatch({ type: 'SET_LOADING', payload: true })
@@ -128,7 +129,7 @@ export const UserProvider = ({ children }) => {
       console.error('Failed to initialize user:', error)
       dispatch({ type: 'SET_ERROR', payload: error.message })
     }
-  }
+  }, [telegramUser])
 
   const mineCoins = (amount = state.miningRate, energyCost = 1) => {
     dispatch({

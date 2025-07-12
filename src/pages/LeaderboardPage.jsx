@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Trophy, Medal, Crown, Star } from 'lucide-react'
 import { useI18n } from '../context/I18nContext'
 import { useUser } from '../context/UserContext'
@@ -13,9 +13,9 @@ const LeaderboardPage = () => {
 
   useEffect(() => {
     loadLeaderboard()
-  }, [selectedPeriod])
+  }, [selectedPeriod, loadLeaderboard])
 
-  const loadLeaderboard = async () => {
+  const loadLeaderboard = useCallback(async () => {
     setLoading(true)
     try {
       const data = await userAPI.getLeaderboard(selectedPeriod)
@@ -25,7 +25,7 @@ const LeaderboardPage = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedPeriod])
 
   const getRankIcon = (rank) => {
     switch (rank) {

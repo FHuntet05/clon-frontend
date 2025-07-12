@@ -22,8 +22,7 @@ const ProfilePage = () => {
     totalEarned,
     level,
     wallet,
-    generateWallet,
-    userData
+    generateWallet
   } = useUser()
   const { user, hapticFeedback, showAlert, showConfirm } = useTelegram()
 

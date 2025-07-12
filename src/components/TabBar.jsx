@@ -52,7 +52,7 @@ const TabBar = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-cosno-dark/90 backdrop-blur-sm border-t border-white/10">
       <div className="flex items-center justify-around py-2 px-4">
-        {tabs.map(({ path, icon: Icon, label }) => {
+        {tabs.map(({ path, icon: TabIcon, label }) => {
           const isActive = location.pathname === path
 
           return (
@@ -65,7 +65,7 @@ const TabBar = () => {
                   : 'text-white/60 hover:text-white/80'
               }`}
             >
-              <Icon
+              <TabIcon
                 size={20}
                 className={`mb-1 ${isActive ? 'drop-shadow-lg' : ''}`}
               />
